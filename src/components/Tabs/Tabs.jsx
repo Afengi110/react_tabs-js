@@ -2,7 +2,7 @@ export const Tabs = ({ tabs, activeTabId, onTabSelected }) => {
   const effectiveActiveId =
     tabs.find(tab => tab.id === activeTabId)?.id || tabs[0].id;
 
-  const activeTab = tabs.find(tab => tab.id === effectiveActiveId);
+  const activeTab = tabs.find(tab => tab.id === activeTabId) || tabs[0];
 
   return (
     <div data-cy="TabsComponent">
