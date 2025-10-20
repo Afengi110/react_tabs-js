@@ -1,38 +1,47 @@
 export const Tabs = ({ tabs, activeTabId, onTabSelected }) => {
-  const effectiveActiveId =
-    tabs.find(tab => tab.id === activeTabId)?.id || tabs[0].id;
+  const validActiveTab =
+    tabs.some(tab => tab.id === activeTabId) && activeTabId
+      ? activeTabId
+      : tabs[0]?.id;
 
-  const activeTab = tabs.find(tab => tab.id === activeTabId) || tabs[0];
+  const handleTabClick = tabId => {
+    if (validActiveTab !== tabId) {
+      onTabSelected(tabId);
+    }
+  };
+
+  const activeTabDescription = tabs.find(
+    tab => tab.id === validActiveTab,
+  )?.content;
 
   return (
     <div data-cy="TabsComponent">
-      <ul className="tabs is-boxed">
-        {tabs.map(tab => (
-          <li
-            key={tab.id}
-            className={effectiveActiveId === tab.id ? 'is-active' : ''}
-            data-cy="Tab"
-          >
-            <a
-              href={`#${tab.id}`}
-              data-cy="TabLink"
-              onClick={e => {
-                e.preventDefault();
-                if (tab.id !== effectiveActiveId) {
-                  onTabSelected(tab.id);
-                }
-              }}
-              role="tab"
-              aria-selected={effectiveActiveId === tab.id}
+      <div className="tabs is-boxed">
+        <ul>
+          {tabs.map(tab => (
+            <li
+              className={validActiveTab === tab.id ? 'is-active' : ''}
+              data-cy="Tab"
+              key={tab.id}
             >
-              {tab.title}
-            </a>
-          </li>
-        ))}
-      </ul>
+              <a
+                href={`#${tab.id}`}
+                data-cy="TabLink"
+                onClick={e => {
+                  e.preventDefault();
+
+                  handleTabClick(tab.id);
+                }}
+              >
+                {tab.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <div className="block" data-cy="TabContent">
-        {activeTab?.content}
+        {activeTabDescription}
       </div>
     </div>
   );
