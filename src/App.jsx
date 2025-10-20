@@ -11,14 +11,16 @@ export const tabs = [
 ];
 
 export const App = () => {
-  const [activeTabId, setActiveTabId] = useState(tabs[0].id);
+  const defaultActiveId = tabs[0]?.id || '';
+  const [activeTabId, setActiveTabId] = useState(defaultActiveId);
 
   const validActiveTab =
     tabs.some(tab => tab.id === activeTabId) && activeTabId
       ? activeTabId
-      : tabs[0]?.id;
+      : tabs[0]?.id || '';
 
-  const activeTabTitle = tabs.find(tab => tab.id === validActiveTab)?.title;
+  const activeTabTitle =
+    tabs.find(tab => tab.id === validActiveTab)?.title || '';
 
   return (
     <div className="section">
